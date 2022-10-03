@@ -1,0 +1,107 @@
+<!-- // id!: number;
+  // name!: string;
+  // gender!: string;
+  // age!: string;
+  // dob!: Date;
+  // number!: string;
+  // email!: string;
+  // address!: string;
+  // photo!: Blob; -->
+
+  <div class="col-md-8 offset-md-3">
+    <h3>Update Patient</h3>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        
+        <div class="form-group mt-3">
+            <label for="name">Name</label>
+            <input 
+                formControlName="name"
+                id="name" 
+                type="text" 
+                class="form-control"
+                [(ngModel)]="patient.name">
+            <div *ngIf="f['name'].touched && f['name'].invalid" class="alert alert-danger">
+                <div *ngIf="f['name'].errors && f['name'].errors['required']">Name is required.</div>
+            </div>
+        </div>
+         
+        <div class="form-group mt-3">
+            <label for="gender">Gender</label>
+            <select
+                formControlName="gender"
+                id="gender"
+                class="form-control"
+                [(ngModel)]="patient.gender"
+            >
+                <option disabled>Select Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+            </select>
+        </div>
+    
+        <div class="form-group mt-3">
+            <label for="age">Age</label>
+            <input 
+                formControlName="age"
+                id="age" 
+                type="text" 
+                class="form-control"
+                [(ngModel)]="patient.age">
+            <div *ngIf="f['age'].touched && f['age'].invalid" class="alert alert-danger">
+                <div *ngIf="f['age'].errors && f['age'].errors['required']">Age is required.</div>
+            </div>
+        </div>
+    
+        <div class="form-group mt-3">
+            <label for="dob">Date of Birth</label>
+            <input 
+                formControlName="dob"
+                id="dob" 
+                type="date" 
+                class="form-control"
+                [(ngModel)]="patient.dob">
+        </div>
+    
+        <div class="form-group mt-3">
+            <label for="number">Contact No.</label>
+            <input 
+                formControlName="number"
+                id="number" 
+                type="text" 
+                class="form-control"
+                [(ngModel)]="patient.number">
+            <div *ngIf="f['number'].touched && f['number'].invalid" class="alert alert-danger">
+                <div *ngIf="f['number'].errors && f['number'].errors['required']">Contact no. is required.</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input 
+                formControlName="email"
+                id="email" 
+                type="text" 
+                class="form-control">
+            <div *ngIf="f['email'].touched && f['email'].invalid" class="alert alert-danger">
+                <div *ngIf="f['email'].errors && f['email'].errors['required']">Email is required.</div>
+                <div *ngIf="f['email'].errors && f['email'].errors['email']">Please, enter a valid email address.</div>
+            </div>
+        </div>
+    
+        <div class="form-group mt-3">
+            <label for="address">Address</label>
+            <input 
+                formControlName="address"
+                id="address" 
+                type="text" 
+                class="form-control"
+                [(ngModel)]="patient.address">
+            <div *ngIf="f['address'].touched && f['address'].invalid" class="alert alert-danger">
+                <div *ngIf="f['address'].errors && f['address'].errors['required']">Address is required.</div>
+            </div>
+        </div>
+        
+        <button class="btn btn-dark mt-3" [disabled]="form.invalid" type="submit">Submit</button>
+    </form>
+    </div>
