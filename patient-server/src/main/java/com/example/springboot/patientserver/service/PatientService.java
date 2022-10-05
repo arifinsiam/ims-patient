@@ -1,15 +1,16 @@
 package com.example.springboot.patientserver.service;
 
 import com.example.springboot.patientserver.exception.ResourceNotFoundException;
+import com.example.springboot.patientserver.model.ImageModel;
 import com.example.springboot.patientserver.model.Patient;
 import com.example.springboot.patientserver.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 public class PatientService {
@@ -22,6 +23,18 @@ public class PatientService {
     public Patient addPatient(Patient patient){
         return patientRepository.save(patient);
     }
+
+    public Set<ImageModel> uploadImage(MultipartFile multipartFile) throws IOException {
+        Set<ImageModel> image = new HashSet<>();
+        ImageModel imageModel = new ImageModel(
+                multipartFile.getOriginalFilename(),
+                multipartFile.getContentType(),
+                multipartFile.getBytes()
+        );
+        image.add(imageModel);
+        return image;
+    }
+
     public ResponseEntity<Patient> getPatientById(Long id){
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Patient does not exist with id: "+id));
@@ -38,7 +51,6 @@ public class PatientService {
         patient.setNumber(newPatientDetails.getNumber());
         patient.setEmail(newPatientDetails.getEmail());
         patient.setAddress(newPatientDetails.getAddress());
-        patient.setPhoto(newPatientDetails.getPhoto());
 
         Patient updatedPatient = patientRepository.save(patient);
         return ResponseEntity.ok(updatedPatient);

@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,9 +28,9 @@ public class Patient {
     @Column(name = "age")
     private String age;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    //@DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "date_of_birth")
-    private Date dob;
+    private String dob;
 
     @Column(name = "number")
     private String number;
@@ -40,7 +41,18 @@ public class Patient {
     @Column(name = "address")
     private String address;
 
-    @Lob
-    @Column(name = "photo")
-    private byte[] photo;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "patient_image",
+        joinColumns = {
+            @JoinColumn(name = "patient_id")
+        },
+        inverseJoinColumns = {
+            @JoinColumn(name = "image_id")
+        }
+    )
+    private Set<ImageModel> patientImage;
+
+//    @Lob
+//    @Column(name = "photo")
+//    private byte[] photo;
 }

@@ -1,3 +1,5 @@
+import { FileHandler } from "./file-handler";
+
 export class Patient {
     id!: number;
     name!: string;
@@ -7,5 +9,5 @@ export class Patient {
     number!: string;
     email!: string;
     address!: string;
-    photo!: Blob;
+    photo!: FileHandler;
 }

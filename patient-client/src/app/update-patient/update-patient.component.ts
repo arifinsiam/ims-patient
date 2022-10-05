@@ -1,4 +1,3 @@
-import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,7 +12,8 @@ import { PatientService } from '../patient.service';
 export class UpdatePatientComponent implements OnInit {
 
   id!: number;
-  patient: Patient = new Patient();
+  patient: Patient = new Patient;
+  selectedFile: any;
 
   constructor(private patientService: PatientService, private router: Router, private route: ActivatedRoute) { }
 
@@ -40,6 +40,13 @@ export class UpdatePatientComponent implements OnInit {
     return this.form.controls;
   }
 
+  onFileSelected(event: any){
+    if(event.target.files){
+      this.selectedFile = event.target.files[0]
+      console.log(event.target.files[0]) 
+    }
+  }
+
   goToPatientList(){
     this.router.navigate(['/patients']);
   }
@@ -50,17 +57,26 @@ export class UpdatePatientComponent implements OnInit {
   }
 
   updatePatient(){
-    // var date = new Date(this.patient.dob)
-    // const format = 'yyyy-MM-dd';
-    // const locale = 'en-US';
-    // const formattedDate = formatDate(date, format, locale);
-    // this.patient.dob = formattedDate;
-
-    this.patientService.updatePatient(this.id, this.patient).subscribe(data => {
+    const patientFormData = this.prepareFormData(this.form.value)
+    this.patientService.updatePatient(patientFormData).subscribe(data => {
       console.log(data);
       this.patient = new Patient;
       this.goToPatientList();
     }, error => console.log(error))
+  }
+
+  prepareFormData(data: any): FormData{
+    const formData = new FormData();
+    formData.append(
+      'newPatientDetails',
+      new Blob([JSON.stringify(data)], {type: 'application/json'})
+    );
+    formData.append(
+      'imageFile',
+      this.selectedFile,
+      this.selectedFile.name
+    );
+    return formData;
   }
 
 }

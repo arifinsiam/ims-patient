@@ -82,7 +82,8 @@
                 formControlName="email"
                 id="email" 
                 type="text" 
-                class="form-control">
+                class="form-control"
+                [(ngModel)]="patient.email">
             <div *ngIf="f['email'].touched && f['email'].invalid" class="alert alert-danger">
                 <div *ngIf="f['email'].errors && f['email'].errors['required']">Email is required.</div>
                 <div *ngIf="f['email'].errors && f['email'].errors['email']">Please, enter a valid email address.</div>
@@ -101,6 +102,20 @@
                 <div *ngIf="f['address'].errors && f['address'].errors['required']">Address is required.</div>
             </div>
         </div>
+
+        <hr>
+        <div class="form-group mt-3 mb-3">
+            <label for="photo">Upload your photo:</label>
+            <input
+                formControlName="photo"
+                type="file"
+                class="form-control"
+                id="photo"
+                #selectFile
+                (change)="onFileSelected($event)"
+                [(ngModel)]="patient.photo">
+        </div>
+        <hr>
         
         <button class="btn btn-dark mt-3" [disabled]="form.invalid" type="submit">Submit</button>
     </form>

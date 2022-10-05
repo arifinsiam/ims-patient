@@ -1,13 +1,17 @@
 package com.example.springboot.patientserver.controller;
 
+import com.example.springboot.patientserver.model.ImageModel;
 import com.example.springboot.patientserver.model.Patient;
 import com.example.springboot.patientserver.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -22,9 +26,17 @@ public class PatientController {
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("/patients")
-    public Patient createPatient(@RequestBody Patient patient){
-        return patientService.addPatient(patient);
+    @PostMapping(value = "/patients", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Patient createPatient(@RequestPart("patient") Patient patient, @RequestPart("imageFile") MultipartFile file){
+        //return patientService.addPatient(patient);
+        try {
+            Set<ImageModel> image = patientService.uploadImage(file);
+            patient.setPatientImage(image);
+            return patientService.addPatient(patient);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
@@ -34,9 +46,17 @@ public class PatientController {
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @PutMapping("/patients/{id}")
-    public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient newPatientDetails){
-        return patientService.updatePatient(id, newPatientDetails);
+    @PutMapping(value = "/patients/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestPart("newPatientDetails") Patient newPatientDetails, @RequestPart("imageFile") MultipartFile file){
+        //return patientService.updatePatient(id, newPatientDetails);
+        try {
+            Set<ImageModel> image = patientService.uploadImage(file);
+            newPatientDetails.setPatientImage(image);
+            return patientService.updatePatient(id, newPatientDetails);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     @CrossOrigin(origins = "http://localhost:4200")

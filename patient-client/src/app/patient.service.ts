@@ -17,11 +17,11 @@ export class PatientService {
   getPatientById(id: number):Observable<Patient>{
     return this.httpClient.get<Patient>(`${this.baseURL}/${id}`);
   }
-  createPatient(data: any): Observable<Object>{
+  createPatient(data: FormData): Observable<Object>{
     return this.httpClient.post(`${this.baseURL}`, data);
   }
-  updatePatient(id: number, patient: Patient): Observable<Object>{
-    return this.httpClient.put(`${this.baseURL}/${id}`, patient);
+  updatePatient(data: any): Observable<Object>{
+    return this.httpClient.put(`${this.baseURL}/${data.id}`, data.patient);
   }
   deletePatient(id: number): Observable<Object>{
     return this.httpClient.delete(`${this.baseURL}/${id}`);
